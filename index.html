@@ -25,7 +25,7 @@ th{background:var(--amarelo)}
 .total{font-size:22px;font-weight:bold;color:#c64f86;margin-top:15px}
 .badge{background:#ffe1ec;padding:6px 10px;border-radius:20px;font-size:13px}
 /* PDF */
-#contratoPDF{background:linear-gradient(135deg,#ffe6f0,#fff8dc,#e8f7ff);padding:40px;position:relative}
+#contratoPDF{background:linear-gradient(135deg,#ffe6f0,#fff8dc,#e8f7ff);padding:40px;position:relative;visibility:hidden;position:absolute;left:-9999px;top:0}
 .watermark{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);opacity:0.07;z-index:0}
 .watermark img{width:90%}
 .content{position:relative;z-index:1;font-size:13px}
@@ -245,6 +245,31 @@ function gerarPDF(){
  cEmpresa.innerText=eNome.value;
  cCidade.innerText=eCidade.value;
  cCliente.innerText=`${clienteAtual.nome} - ${clienteAtual.cpf}`;
+ cEndereco.innerText=clienteAtual.end;
+ cData.innerText=dataEvento.value;
+ cLocal.innerText=localEvento.value;
+ cRet.innerText=horaRetirada.value;
+ cDev.innerText=horaDevolucao.value;
+ cItens.innerHTML=itens.map(i=>`${i.item} (${i.qtd})`).join('<br>')||'—';
+ cPenal.innerHTML=penal.map(p=>`${p.tipo}: ${p.desc} - R$ ${p.valor.toFixed(2)}`).join('<br>')||'Nenhuma';
+ cTotal.innerText=receber.toFixed(2);
+ cAss.innerText=assinatura.value;
+ cValorContrato.innerText=valorContrato.toFixed(2);
+ cSinal.innerText=sinal.toFixed(2);
+ contratos.push({num,cliente:clienteAtual,total:receber});
+ localStorage.setItem('contratos',JSON.stringify(contratos));
+
+ const contrato=document.getElementById('contratoPDF');
+ contrato.style.visibility='visible';
+
+ html2pdf().from(contrato).set({
+  filename:`Contrato_${num}_${clienteAtual.nome}.pdf`,
+  html2canvas:{scale:2,useCORS:true},
+  jsPDF:{format:'a4',orientation:'portrait'}
+ }).save().then(()=>{
+  contrato.style.visibility='hidden';
+ });
+} - ${clienteAtual.cpf}`;
  cEndereco.innerText=clienteAtual.end;
  cData.innerText=dataEvento.value;
  cLocal.innerText=localEvento.value;
