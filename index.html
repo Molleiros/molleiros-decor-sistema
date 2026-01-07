@@ -127,21 +127,24 @@ th{background:var(--amarelo)}
 
 <div id="contratoPDF" style="display:none">
 <div class="watermark"><img src="logo.png"></div>
-<div class="content">
+<div class="content" id="contratoConteudo">
 <h2 style="text-align:center">CONTRATO DE LOCAÇÃO – PEGUE E MONTE</h2>
-<p class="badge">Contrato Nº <span id="numContrato"></span></p>
-<table>
-<tr><td><strong id="cEmpresa"></strong><br><span id="cCidade"></span></td><td><strong>Cliente</strong><br><span id="cCliente"></span><br><span id="cEndereco"></span></td></tr>
-</table>
-<p><strong>Evento:</strong> <span id="cData"></span> | <span id="cLocal"></span></p>
-<p>Retirada: <span id="cRet"></span> | Devolução: <span id="cDev"></span></p>
-<h3>Itens Locados</h3><div id="cItens"></div>
-<h3>Penalidades</h3><div id="cPenal"></div>
-<h2 style="color:#c64f86">VALOR A RECEBER: R$ <span id="cTotal"></span></h2>
+<p><strong>LOCADORA:</strong> <span id="cEmpresa"></span> – <span id="cCidade"></span></p>
+<p><strong>LOCATÁRIO:</strong> <span id="cCliente"></span><br><span id="cEndereco"></span></p>
+<p><strong>EVENTO:</strong> <span id="cData"></span> – <span id="cLocal"></span></p>
+<p><strong>RETIRADA:</strong> <span id="cRet"></span> | <strong>DEVOLUÇÃO:</strong> <span id="cDev"></span></p>
+<h3>ITENS LOCADOS</h3><div id="cItens"></div>
+<h3>AVARIAS / EXTRAVIOS</h3><div id="cPenal"></div>
+<h2 style="color:#c64f86">VALOR FINAL A RECEBER: R$ <span id="cTotal"></span></h2>
 <p><strong>Valor do Contrato:</strong> R$ <span id="cValorContrato"></span><br>
 <strong>Sinal Recebido:</strong> R$ <span id="cSinal"></span></p>
-<p><strong>Assinatura do Cliente:</strong> <span id="cAss"></span></p>
-<p>Contrato eletrônico com validade jurídica conforme MP 2.200-2.</p>
+<h3>CLÁUSULAS CONTRATUAIS</h3>
+<p>1. O LOCATÁRIO declara receber os itens em perfeitas condições, responsabilizando-se por sua guarda e conservação.</p>
+<p>2. Em caso de avaria, quebra, dano ou extravio de qualquer item, o LOCATÁRIO compromete-se a pagar o valor integral informado no catálogo.</p>
+<p>3. A devolução deverá ocorrer na data e horário combinados. Atrasos poderão gerar cobrança adicional.</p>
+<p>4. O não cumprimento das cláusulas autoriza a LOCADORA a reter valores pagos como forma de indenização.</p>
+<p>5. Este contrato possui validade jurídica conforme MP 2.200-2/2001.</p>
+<p><strong>Assinatura Digital do Cliente:</strong> <span id="cAss"></span></p>
 </div>
 </div>
 
