@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Molleiros Decor | Sistema Profissional Total</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
 <style>
 :root{
  --rosa:#f8c8dc;--rosa2:#f4b3cd;--amarelo:#fff1c1;--texto:#555;
@@ -241,10 +241,39 @@ function previewContrato(){
 function gerarPDF(){
  let receber=recalcular();
  let num=contratos.length+1;
+ 
  numContrato.innerText=num;
  cEmpresa.innerText=eNome.value;
  cCidade.innerText=eCidade.value;
  cCliente.innerText=`${clienteAtual.nome} - ${clienteAtual.cpf}`;
+ cEndereco.innerText=clienteAtual.end;
+ cData.innerText=dataEvento.value;
+ cLocal.innerText=localEvento.value;
+ cRet.innerText=horaRetirada.value;
+ cDev.innerText=horaDevolucao.value;
+ cItens.innerHTML=itens.map(i=>`${i.item} (${i.qtd})`).join('<br>')||'—';
+ cPenal.innerHTML=penal.map(p=>`${p.tipo}: ${p.desc} - R$ ${p.valor.toFixed(2)}`).join('<br>')||'Nenhuma';
+ cTotal.innerText=receber.toFixed(2);
+ cAss.innerText=assinatura.value;
+ cValorContrato.innerText=valorContrato.toFixed(2);
+ cSinal.innerText=sinal.toFixed(2);
+ 
+ contratos.push({num,cliente:clienteAtual,total:receber});
+ localStorage.setItem('contratos',JSON.stringify(contratos));
+ 
+ // MÉTODO GARANTIDO: NOVA ABA + IMPRESSÃO
+ const w = window.open('', '_blank');
+ w.document.write(`<!DOCTYPE html><html><head><title>Contrato ${num}</title>
+ <style>
+ body{font-family:Segoe UI,sans-serif;padding:40px;background:linear-gradient(135deg,#ffe6f0,#fff8dc,#e8f7ff)}
+ h2{color:#c64f86;text-align:center}
+ </style></head><body>`);
+ w.document.write(document.getElementById('contratoConteudo').innerHTML);
+ w.document.write('</body></html>');
+ w.document.close();
+ w.focus();
+ setTimeout(()=>w.print(),500);
+} - ${clienteAtual.cpf}`;
  cEndereco.innerText=clienteAtual.end;
  cData.innerText=dataEvento.value;
  cLocal.innerText=localEvento.value;
