@@ -125,7 +125,7 @@ th{background:var(--amarelo)}
 </div>
 </section>
 
-<div id="contratoPDF" style="display:none">
+<div id="contratoPDF">
 <div class="watermark"><img src="logo.png"></div>
 <div class="content" id="contratoConteudo">
 <h2 style="text-align:center">CONTRATO DE LOCAÇÃO – PEGUE E MONTE</h2>
@@ -239,13 +239,112 @@ function previewContrato(){
 }
 
 function gerarPDF(){
- let receber=recalcular();
- let num=contratos.length+1;
- 
- numContrato.innerText=num;
- cEmpresa.innerText=eNome.value;
- cCidade.innerText=eCidade.value;
- cCliente.innerText=`${clienteAtual.nome} - ${clienteAtual.cpf}`;
+  // garante que valores estejam atualizados
+  let receber = valorContrato - sinal + total;
+
+  // preenche dados do contrato visível
+  document.getElementById('numContrato').innerText = contratos.length + 1;
+  document.getElementById('cEmpresa').innerText = eNome.value;
+  document.getElementById('cCidade').innerText = eCidade.value;
+  document.getElementById('cCliente').innerText = `${clienteAtual.nome} - ${clienteAtual.cpf}`;
+  document.getElementById('cEndereco').innerText = clienteAtual.end;
+  document.getElementById('cData').innerText = dataEvento.value;
+  document.getElementById('cLocal').innerText = localEvento.value;
+  document.getElementById('cRet').innerText = horaRetirada.value;
+  document.getElementById('cDev').innerText = horaDevolucao.value;
+  document.getElementById('cItens').innerHTML = itens.map(i=>`${i.item} (${i.qtd}) - R$ ${i.valor}`).join('<br>');
+  document.getElementById('cPenal').innerHTML = penal.map(p=>`${p.tipo}: ${p.desc} - R$ ${p.valor}`).join('<br>');
+  document.getElementById('cTotal').innerText = receber.toFixed(2);
+  document.getElementById('cValorContrato').innerText = Number(valorContrato).toFixed(2);
+  document.getElementById('cSinal').innerText = Number(sinal).toFixed(2);
+  document.getElementById('cAss').innerText = assinatura.value;
+
+  html2pdf()
+    .set({
+      margin: 10,
+      filename: `Contrato_${clienteAtual.nome}.pdf`,
+      html2canvas: { scale: 2, useCORS: true },
+      jsPDF: { format: 'a4', orientation: 'portrait' }
+    })
+    .from(document.getElementById('contratoPDF'))
+    .save();
+}
+ h1,h2{color:#c64f86;text-align:center}
+ p{font-size:14px;line-height:1.5}
+ </style></head><body>
+ <h1>CONTRATO DE LOCAÇÃO – PEGUE E MONTE</h1>
+ <p><strong>Empresa:</strong> ${eNome.value} – ${eCidade.value}</p>
+ <p><strong>Cliente:</strong> ${clienteAtual.nome || ''}</p>
+ <p><strong>Valor do contrato:</strong> R$ ${valorContrato.toFixed(2)}</p>
+ <p><strong>Sinal:</strong> R$ ${sinal.toFixed(2)}</p>
+ <h2>Valor a receber: R$ ${receber.toFixed(2)}</h2>
+ <p>Assinatura: ${assinatura.value || ''}</p>
+ </body></html>`;
+
+ const blob = new Blob([html], { type: 'text/html' });
+ const url = URL.createObjectURL(blob);
+
+ const a = document.createElement('a');
+ a.href = url;
+ a.target = '_blank';
+ a.click();
+
+ setTimeout(()=>URL.revokeObjectURL(url),5000);
+
+ contratos.push({num,cliente:clienteAtual,total:receber});
+ localStorage.setItem('contratos',JSON.stringify(contratos));
+}
+ w.document.open();
+ w.document.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Contrato Teste</title>');
+ w.document.write('<style>body{font-family:Arial;padding:40px}h1{color:#c64f86}</style>');
+ w.document.write('</head><body>');
+ w.document.write('<h1>CONTRATO DE TESTE</h1>');
+ w.document.write('<p>Se você está vendo este texto, o navegador CONSEGUE gerar PDF corretamente.</p>');
+ w.document.write('<p>Próximo passo: reintegrar dados dinâmicos com segurança.</p>');
+ w.document.write('</body></html>');
+ w.document.close();
+ w.focus();
+ setTimeout(()=>w.print(),300);
+}</title>
+ <style>
+ body{font-family:Segoe UI,Arial,sans-serif;padding:40px;
+ background:linear-gradient(135deg,#ffe6f0,#fff8dc,#e8f7ff)}
+ h2,h3{color:#c64f86;text-align:center}
+ p{font-size:14px}
+ .box{background:#fff;padding:25px;border-radius:16px}
+ </style></head><body>
+ <div class="box">
+ <h2>CONTRATO DE LOCAÇÃO – PEGUE E MONTE</h2>
+ <p><strong>Empresa:</strong> ${eNome.value} – ${eCidade.value}</p>
+ <p><strong>Cliente:</strong> ${clienteAtual.nome} – ${clienteAtual.cpf}<br>${clienteAtual.end}</p>
+ <p><strong>Evento:</strong> ${dataEvento.value} – ${localEvento.value}</p>
+ <p><strong>Retirada:</strong> ${horaRetirada.value} | <strong>Devolução:</strong> ${horaDevolucao.value}</p>
+ <h3>Itens Locados</h3>
+ <p>${itens.map(i=>`${i.item} (${i.qtd})`).join('<br>') || '—'}</p>
+ <h3>Avarias / Extravios</h3>
+ <p>${penal.map(p=>`${p.tipo}: ${p.desc} – R$ ${p.valor.toFixed(2)}`).join('<br>') || 'Nenhuma'}</p>
+ <h3>Valores</h3>
+ <p>Valor do contrato: R$ ${valorContrato.toFixed(2)}<br>
+ Sinal recebido: R$ ${sinal.toFixed(2)}</p>
+ <h2>VALOR FINAL A RECEBER: R$ ${receber.toFixed(2)}</h2>
+ <h3>Cláusulas Contratuais</h3>
+ <p>1. O locatário declara receber os itens em perfeitas condições.</p>
+ <p>2. Em caso de avaria ou extravio, será cobrado o valor integral do item.</p>
+ <p>3. A devolução deverá ocorrer na data e horário combinados.</p>
+ <p>4. Este contrato possui validade jurídica conforme MP 2.200-2/2001.</p>
+ <p><strong>Assinatura digital:</strong> ${assinatura.value}</p>
+ </div></body></html>`;
+
+ const w = window.open('', '_blank');
+ w.document.open();
+ w.document.write(htmlContrato);
+ w.document.close();
+ w.focus();
+ setTimeout(()=>w.print(),300);
+
+ contratos.push({num,cliente:clienteAtual,total:receber});
+ localStorage.setItem('contratos',JSON.stringify(contratos));
+} - ${clienteAtual.cpf}`;
  cEndereco.innerText=clienteAtual.end;
  cData.innerText=dataEvento.value;
  cLocal.innerText=localEvento.value;
