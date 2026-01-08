@@ -2,288 +2,206 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>Molleiros Decor | Sistema Profissional Total</title>
+<title>Molleiros Decor | Contrato Pegue e Monte</title>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
 <style>
-:root{
- --rosa:#f8c8dc;--rosa2:#f4b3cd;--amarelo:#fff1c1;--texto:#555;
+body{
+  font-family:'Segoe UI',Arial;
+  background:#fdf6f9;
+  margin:0;
 }
-body{font-family:'Segoe UI',sans-serif;background:#fff7fb;margin:0;color:var(--texto)}
-header{background:var(--rosa);padding:15px;text-align:center}
-header img{height:80px}
-section{background:#fff;max-width:1300px;margin:20px auto;padding:20px;border-radius:20px;box-shadow:0 0 16px rgba(0,0,0,.06)}
-h2,h3{color:#d96c9a;margin-top:0}
-label{display:block;margin-top:8px;font-size:14px}
-input,select,textarea{width:100%;padding:8px;border-radius:8px;border:1px solid #ddd}
-button{background:var(--rosa);border:none;padding:10px 18px;border-radius:10px;margin:6px 4px 0 0;cursor:pointer}
-button:hover{background:var(--rosa2)}
-.flex{display:flex;gap:12px;flex-wrap:wrap}
-.flex>div{flex:1}
-table{width:100%;border-collapse:collapse;margin-top:10px}
-th,td{border:1px solid #eee;padding:6px;font-size:13px}
-th{background:var(--amarelo)}
-.total{font-size:22px;font-weight:bold;color:#c64f86;margin-top:15px}
-.badge{background:#ffe1ec;padding:6px 10px;border-radius:20px;font-size:13px}
-/* PDF */
-#contratoPDF{
-  background:linear-gradient(135deg,#ffe6f0,#fff8dc,#e8f7ff);
-  padding:40px;
-  position:relative;
-  min-height:1100px; /* força área visível A4 */
-  margin-top:40px;
-  border:4px dashed #f4b3cd;
-}
-.watermark{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);opacity:0.08;z-index:0}
-.watermark img{width:90%}
-.content{position:relative;z-index:1;font-size:13px;color:#444}
 
-.watermark{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);opacity:0.07;z-index:0}
+header{
+  background:#f8c8dc;
+  padding:20px;
+  text-align:center;
+}
+header img{height:90px}
+
+section{
+  background:#fff;
+  max-width:1000px;
+  margin:25px auto;
+  padding:25px;
+  border-radius:14px;
+  box-shadow:0 0 12px rgba(0,0,0,.06);
+}
+
+h2{color:#c64f86}
+
+label{display:block;margin-top:10px}
+input{
+  width:100%;
+  padding:8px;
+  border-radius:8px;
+  border:1px solid #ddd;
+}
+
+button{
+  background:#f8c8dc;
+  border:none;
+  padding:10px 18px;
+  border-radius:8px;
+  margin-top:15px;
+  cursor:pointer;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  margin-top:15px;
+}
+th,td{
+  border:1px solid #eee;
+  padding:8px;
+  text-align:center;
+}
+th{background:#fff1c1}
+
+/* CONTRATO */
+#contratoPDF{
+  margin-top:40px;
+  padding:50px;
+  min-height:1100px;
+  background:linear-gradient(135deg,#ffe6f0,#fff8dc,#e8f7ff);
+  position:relative;
+}
+
+.watermark{
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  opacity:0.08;
+}
 .watermark img{width:90%}
-.content{position:relative;z-index:1;font-size:13px}
-@media(max-width:768px){section{margin:10px}}
+
+.contratoConteudo{
+  position:relative;
+  z-index:1;
+  font-size:14px;
+  color:#444;
+}
+
+.valorDestaque{
+  font-size:20px;
+  font-weight:bold;
+  color:#c64f86;
+  margin:15px 0;
+}
 </style>
 </head>
+
 <body>
-<header><img src="logo.png"></header>
+
+<header>
+  <img src="logo.png">
+</header>
 
 <section>
-<h2>🏢 Dados da Empresa</h2>
-<div class="flex">
-<div><label>Nome</label><input id="eNome" value="Molleiros Decor"></div>
-<div><label>Cidade</label><input id="eCidade" value="Carapicuíba / SP"></div>
-<div><label>Contato</label><input id="eContato" value="WhatsApp"></div>
-</div>
-</section>
-
-<section>
-<h2>👩‍👧 Cliente</h2>
-<div class="flex">
-<div><label>Nome</label><input id="nome"></div>
-<div><label>CPF</label><input id="cpf"></div>
-<div><label>Telefone</label><input id="telefone"></div>
-<div><label>Email</label><input id="email"></div>
-</div>
-<label>Endereço</label><input id="endereco">
-<button onclick="salvarCliente()">Salvar Cliente</button>
-<select id="listaClientes" onchange="carregarCliente()"></select>
+<h2>Cliente</h2>
+<label>Nome</label><input id="cNome">
+<label>CPF</label><input id="cCpf">
+<label>Telefone</label><input id="cTel">
+<label>Endereço</label><input id="cEnd">
 </section>
 
 <section>
-<h2>🎉 Evento</h2>
-<div class="flex">
-<div><label>Data</label><input type="date" id="dataEvento"></div>
-<div><label>Local</label><input id="localEvento"></div>
-<div><label>Retirada</label><input id="horaRetirada"></div>
-<div><label>Devolução</label><input id="horaDevolucao"></div>
-</div>
+<h2>Valores da Locação</h2>
+<label>Valor do Contrato (R$)</label><input id="valorContrato" type="number">
+<label>Sinal Pago (R$)</label><input id="sinal" type="number">
+<div id="valorReceber" class="valorDestaque"></div>
 </section>
 
 <section>
-<h2>📦 Catálogo & Estoque</h2>
-<div class="flex">
-<div><label>Item</label><input id="catItem"></div>
-<div><label>Valor</label><input type="number" id="catValor"></div>
-<div><label>Estoque</label><input type="number" id="catEstoque"></div>
-</div>
-<button onclick="addCatalogo()">Adicionar ao Catálogo</button>
-<table id="tCatalogo"><tr><th>Item</th><th>Valor</th><th>Estoque</th></tr></table>
+<h2>Itens do Kit (Valores para avaria/extravio)</h2>
+<label>Item</label><input id="item">
+<label>Valor de Reposição (R$)</label><input id="valorItem" type="number">
+<button onclick="addItem()">Adicionar</button>
+
+<table id="tabela">
+<tr><th>Item</th><th>Valor Reposição</th></tr>
+</table>
 </section>
 
 <section>
-<h2>📦 Itens do Contrato</h2>
-<select id="catalogo" onchange="preencheCatalogo()"></select>
-<div class="flex">
-<div><label>Item</label><input id="item"></div>
-<div><label>Qtd</label><input type="number" id="qtd"></div>
-<div><label>Valor Unit.</label><input type="number" id="valor"></div>
-</div>
-<button onclick="addItem()">Adicionar Item</button>
-<table id="tItens"><tr><th>Item</th><th>Qtd</th><th>Valor</th><th>Subtotal</th></tr></table>
-
-<h3>⚠️ Avarias / Extravios</h3>
-<div class="flex">
-<div><label>Tipo</label><select id="tipo"><option>Avaria</option><option>Extravio</option></select></div>
-<div><label>Descrição</label><input id="desc"></div>
-<div><label>Valor</label><input type="number" id="valorPenal"></div>
-</div>
-<button onclick="addPenal()">Adicionar Penalidade</button>
-<table id="tPenal"><tr><th>Tipo</th><th>Descrição</th><th>Valor</th></tr></table>
-<div class="flex" style="margin-top:15px">
-<div><label>Valor do Contrato (R$)</label><input type="number" id="valorContrato" oninput="recalcular()"></div>
-<div><label>Sinal Recebido (R$)</label><input type="number" id="sinal" oninput="recalcular()"></div>
-</div>
-<div class="total" id="total">Valor a Receber: R$ 0,00</div>
+<button onclick="gerarContrato()">Atualizar Contrato</button>
+<button onclick="gerarPDF()">Gerar PDF</button>
 </section>
 
-<section>
-<h2>✍️ Assinatura do Cliente</h2>
-<label>Digite o nome para assinatura digital</label>
-<input id="assinatura">
-</section>
+<section id="contratoPDF">
 
-<section>
-<h2>🧾 Finalização</h2>
-<button onclick="previewContrato()">👁️ Visualizar Contrato</button>
-<button onclick="gerarPDF()">📄 Gerar PDF</button>
-<button onclick="enviarWhats()">📲 Enviar WhatsApp</button>
-<button onclick="novoAtendimento()">🔄 Novo Atendimento</button>
-</section>
+<div class="watermark">
+  <img src="logo.png">
+</div>
 
-<section id="previewBox" style="display:none">
-<h2>👁️ Pré-visualização do Contrato</h2>
-<div style="max-height:500px;overflow:auto;border:1px solid #eee;padding:15px;border-radius:12px">
-<div id="previewContrato"></div>
+<div class="contratoConteudo" id="contratoTexto">
+<h1 style="text-align:center;color:#c64f86">CONTRATO DE LOCAÇÃO – PEGUE E MONTE</h1>
+<p style="text-align:center;font-weight:bold">
+*** CONTRATO VISÍVEL NA TELA ***
+</p>
 </div>
-</section>
 
-<div id="contratoPDF">
-<!-- VISUALIZAÇÃO DO CONTRATO (SE ESTA ÁREA NÃO APARECER, O PDF NÃO FUNCIONA) -->
-<div class="watermark"><img src="logo.png"></div>
-<div class="content" id="contratoConteudo">
-<h1 style="text-align:center;color:#c64f86">📄 CONTRATO – VISUALIZAÇÃO NA TELA</h1>
-<p style="text-align:center;font-weight:bold">Se você está vendo este bloco, o contrato ESTÁ visível e o PDF irá funcionar.</p>
-<h2 style="text-align:center">CONTRATO DE LOCAÇÃO – PEGUE E MONTE</h2>
-<p><strong>LOCADORA:</strong> <span id="cEmpresa"></span> – <span id="cCidade"></span></p>
-<p><strong>LOCATÁRIO:</strong> <span id="cCliente"></span><br><span id="cEndereco"></span></p>
-<p><strong>EVENTO:</strong> <span id="cData"></span> – <span id="cLocal"></span></p>
-<p><strong>RETIRADA:</strong> <span id="cRet"></span> | <strong>DEVOLUÇÃO:</strong> <span id="cDev"></span></p>
-<h3>ITENS LOCADOS</h3><div id="cItens"></div>
-<h3>AVARIAS / EXTRAVIOS</h3><div id="cPenal"></div>
-<h2 style="color:#c64f86">VALOR FINAL A RECEBER: R$ <span id="cTotal"></span></h2>
-<p><strong>Valor do Contrato:</strong> R$ <span id="cValorContrato"></span><br>
-<strong>Sinal Recebido:</strong> R$ <span id="cSinal"></span></p>
-<h3>CLÁUSULAS CONTRATUAIS</h3>
-<p>1. O LOCATÁRIO declara receber os itens em perfeitas condições, responsabilizando-se por sua guarda e conservação.</p>
-<p>2. Em caso de avaria, quebra, dano ou extravio de qualquer item, o LOCATÁRIO compromete-se a pagar o valor integral informado no catálogo.</p>
-<p>3. A devolução deverá ocorrer na data e horário combinados. Atrasos poderão gerar cobrança adicional.</p>
-<p>4. O não cumprimento das cláusulas autoriza a LOCADORA a reter valores pagos como forma de indenização.</p>
-<p>5. Este contrato possui validade jurídica conforme MP 2.200-2/2001.</p>
-<p><strong>Assinatura Digital do Cliente:</strong> <span id="cAss"></span></p>
-</div>
-</div>
+</section>
 
 <script>
-// ================= DADOS =================
-let clientes = JSON.parse(localStorage.getItem('clientes')) || [];
-let catalogoItens = JSON.parse(localStorage.getItem('catalogo')) || [];
-let contratos = JSON.parse(localStorage.getItem('contratos')) || [];
-let clienteAtual = {}, itens = [], penal = [];
-let valorContrato = 0, sinal = 0, totalPenal = 0;
+let itens = [];
 
-// ================= INIT =================
-function init(){
-  listaClientes.innerHTML = '<option value="">Clientes salvos</option>';
-  clientes.forEach((c,i)=>listaClientes.innerHTML+=`<option value="${i}">${c.nome}</option>`);
-
-  catalogo.innerHTML='<option value="">Selecionar item</option>';
-  tCatalogo.innerHTML='<tr><th>Item</th><th>Valor</th><th>Estoque</th></tr>';
-  catalogoItens.forEach((c,i)=>{
-    catalogo.innerHTML+=`<option value="${i}">${c.item}</option>`;
-    tCatalogo.innerHTML+=`<tr><td>${c.item}</td><td>${c.valor}</td><td>${c.estoque}</td></tr>`;
-  });
-  recalcular();
-}
-init();
-
-// ================= CLIENTE =================
-function salvarCliente(){
-  clienteAtual={nome:nome.value,cpf:cpf.value,telefone:telefone.value,email:email.value,end:endereco.value};
-  clientes.push(clienteAtual);
-  localStorage.setItem('clientes',JSON.stringify(clientes));
-  init();
-  alert('Cliente salvo');
-}
-
-function carregarCliente(){
-  let c=clientes[listaClientes.value];
-  if(!c) return;
-  Object.assign(clienteAtual,c);
-  nome.value=c.nome;cpf.value=c.cpf;telefone.value=c.telefone;email.value=c.email;endereco.value=c.end;
-}
-
-// ================= CATÁLOGO =================
-function addCatalogo(){
-  catalogoItens.push({item:catItem.value,valor:Number(catValor.value),estoque:catEstoque.value});
-  localStorage.setItem('catalogo',JSON.stringify(catalogoItens));
-  init();
-  catItem.value=catValor.value=catEstoque.value='';
-}
-
-function preencheCatalogo(){
-  let c=catalogoItens[catalogo.value];
-  if(c){item.value=c.item;valor.value=c.valor;}
-}
-
-// ================= ITENS =================
 function addItem(){
-  itens.push({item:item.value,qtd:qtd.value,valor:valor.value});
-  tItens.innerHTML+=`<tr><td>${item.value}</td><td>${qtd.value}</td><td>${valor.value}</td><td>-</td></tr>`;
-  item.value=qtd.value=valor.value='';
+  let i = item.value;
+  let v = valorItem.value;
+  itens.push({i,v});
+  tabela.innerHTML += `<tr><td>${i}</td><td>R$ ${Number(v).toFixed(2)}</td></tr>`;
+  item.value=""; valorItem.value="";
 }
 
-function addPenal(){
-  let v=Number(valorPenal.value)||0;
-  totalPenal+=v;
-  penal.push({tipo:tipo.value,desc:desc.value,valor:v});
-  tPenal.innerHTML+=`<tr><td>${tipo.value}</td><td>${desc.value}</td><td>${v.toFixed(2)}</td></tr>`;
-  desc.value=valorPenal.value='';
-  recalcular();
+function gerarContrato(){
+  let vc = Number(valorContrato.value||0);
+  let s = Number(sinal.value||0);
+  let receber = vc - s;
+
+  valorReceber.innerText = `Valor a Receber: R$ ${receber.toFixed(2)}`;
+
+  let lista = itens.map(x=>`${x.i} – Valor reposição: R$ ${Number(x.v).toFixed(2)}`).join("<br>");
+
+  contratoTexto.innerHTML = `
+  <h1 style="text-align:center;color:#c64f86">CONTRATO DE LOCAÇÃO – PEGUE E MONTE</h1>
+
+  <strong>LOCADORA:</strong><br>
+  Molleiros Decor – Decoração Infantil<br><br>
+
+  <strong>LOCATÁRIO:</strong><br>
+  ${cNome.value}<br>
+  CPF: ${cCpf.value}<br>
+  Telefone: ${cTel.value}<br>
+  Endereço: ${cEnd.value}<br><br>
+
+  <strong>VALOR DO CONTRATO:</strong>
+  <div class="valorDestaque">R$ ${vc.toFixed(2)}</div>
+
+  <strong>SINAL PAGO:</strong> R$ ${s.toFixed(2)}<br>
+  <strong>VALOR A RECEBER:</strong> R$ ${receber.toFixed(2)}<br><br>
+
+  <strong>ITENS LOCADOS (Valores para avaria/extravio):</strong><br>
+  ${lista}<br><br>
+
+  <strong>CLÁUSULAS:</strong><br>
+  O LOCATÁRIO se responsabiliza pela guarda, conservação e devolução dos itens
+  nas mesmas condições recebidas, ficando sujeito à cobrança integral dos valores
+  de reposição em caso de avaria ou extravio.<br><br>
+
+  Documento assinado eletronicamente.<br>
+  Foro: Carapicuíba – SP
+  `;
 }
 
-// ================= VALORES =================
-function recalcular(){
-  valorContrato=Number(valorContratoInput.value)||0;
-  sinal=Number(sinalInput.value)||0;
-  let receber=(valorContrato - sinal) + totalPenal;
-  total.innerText=`Valor a Receber: R$ ${receber.toFixed(2)}`;
-  return receber;
-}
-
-// ================= PREVIEW =================
-function previewContrato(){
-  let receber=recalcular();
-  previewContrato.innerHTML=`
-    <h3>CONTRATO DE LOCAÇÃO – PEGUE E MONTE</h3>
-    <p><strong>Empresa:</strong> ${eNome.value} – ${eCidade.value}</p>
-    <p><strong>Cliente:</strong> ${clienteAtual.nome} – ${clienteAtual.cpf}</p>
-    <p><strong>Evento:</strong> ${dataEvento.value} – ${localEvento.value}</p>
-    <p><strong>Valor a receber:</strong> R$ ${receber.toFixed(2)}</p>`;
-  previewBox.style.display='block';
-}
-
-// ================= PDF =================
 function gerarPDF(){
-  let receber=recalcular();
-
-  cEmpresa.innerText=eNome.value;
-  cCidade.innerText=eCidade.value;
-  cCliente.innerText=`${clienteAtual.nome} - ${clienteAtual.cpf}`;
-  cEndereco.innerText=clienteAtual.end;
-  cData.innerText=dataEvento.value;
-  cLocal.innerText=localEvento.value;
-  cRet.innerText=horaRetirada.value;
-  cDev.innerText=horaDevolucao.value;
-  cItens.innerHTML=itens.map(i=>`${i.item} (${i.qtd})`).join('<br>')||'—';
-  cPenal.innerHTML=penal.map(p=>`${p.tipo}: ${p.desc} - R$ ${p.valor.toFixed(2)}`).join('<br>')||'Nenhuma';
-  cTotal.innerText=receber.toFixed(2);
-  cValorContrato.innerText=valorContrato.toFixed(2);
-  cSinal.innerText=sinal.toFixed(2);
-  cAss.innerText=assinatura.value;
-
-  html2pdf().from(contratoPDF).set({
-    filename:`Contrato_${clienteAtual.nome}.pdf`,
-    html2canvas:{scale:2,useCORS:true},
-    jsPDF:{format:'a4',orientation:'portrait'}
-  }).save();
+  gerarContrato();
+  html2pdf().from(document.getElementById("contratoPDF")).save("Contrato_Molleiros_Decor.pdf");
 }
-
-function enviarWhats(){
-  let receber=recalcular();
-  let msg=`Olá ${clienteAtual.nome}! Valor a receber: R$ ${receber.toFixed(2)}`;
-  window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`);
-}
-
-function novoAtendimento(){location.reload();}
 </script>
+
 </body>
 </html>
